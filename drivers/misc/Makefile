@@ -60,6 +60,7 @@ obj-$(CONFIG_SEC_MODEM_V1)	+= modem_v1/
 obj-$(CONFIG_SEC_MODEM_IF)	+= modem_if/
 obj-$(CONFIG_MFD_MAX77693)      += max77693-muic.o
 obj-y				+= 2mic/
+obj-$(CONFIG_UID_CPUTIME) += uid_cputime.o
 
 # Secure OS Mobicore Interface
 obj-$(CONFIG_MOBICORE_DRIVER)  += tzic.o
