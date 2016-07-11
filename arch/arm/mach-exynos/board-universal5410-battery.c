@@ -673,7 +673,7 @@ sec_battery_platform_data_t sec_battery_pdata = {
 	.recharge_condition_type =
 		SEC_BATTERY_RECHARGE_CONDITION_VCELL,
 	.recharge_condition_soc = 98,
-	.recharge_condition_vcell = 4300,
+	.recharge_condition_vcell = 4350,
 
 	.charging_total_time = 6 * 60 * 60,
 	.recharging_total_time =  90 * 60,
