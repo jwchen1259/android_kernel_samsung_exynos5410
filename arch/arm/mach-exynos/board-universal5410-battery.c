@@ -666,7 +666,7 @@ sec_battery_platform_data_t sec_battery_pdata = {
 #if defined(CONFIG_MACH_J_CHN_CTC)
 	.full_condition_vcell = 4150,
 #else
-	.full_condition_vcell = 4250,
+	.full_condition_vcell = 4300,
 #endif
 
 	.recharge_check_count = 2,
