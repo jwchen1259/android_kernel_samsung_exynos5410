@@ -1,0 +1,11 @@
+--- drivers/usb/core/driver.c
++++ drivers/usb/core/driver.c
+@@ -1373,7 +1391,7 @@ int usb_resume(struct device *dev, pm_message_t msg)
+ 		pm_runtime_disable(dev);
+ 		pm_runtime_set_active(dev);
+ 		pm_runtime_enable(dev);
+-		unbind_no_reset_resume_drivers_interfaces(udev);
++		unbind_marked_interfaces(udev);
+ 	}
+ 
+ 	/* Avoid PM error messages for devices disconnected while suspended

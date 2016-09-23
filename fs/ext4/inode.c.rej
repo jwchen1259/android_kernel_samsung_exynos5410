@@ -1,0 +1,12 @@
+--- fs/ext4/inode.c
++++ fs/ext4/inode.c
+@@ -2448,7 +2460,8 @@ retry:
+ 	 * to journalling the i_disksize update if writes to the end
+ 	 * of file which has an already mapped buffer.
+ 	 */
+-	handle = ext4_journal_start(inode, 1);
++	handle = ext4_journal_start(inode,
++				ext4_da_write_credits(inode, pos, len));
+ 	if (IS_ERR(handle)) {
+ 		ret = PTR_ERR(handle);
+ 		goto out;
