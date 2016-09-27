@@ -191,11 +191,8 @@ struct dentry_operations {
 #define DCACHE_MANAGED_DENTRY \
 	(DCACHE_MOUNTED|DCACHE_NEED_AUTOMOUNT|DCACHE_MANAGE_TRANSIT)
 
-<<<<<<< HEAD
 #define DCACHE_DENTRY_KILLED	0x100000
-=======
 #define DCACHE_ENCRYPTED_WITH_KEY	0x04000000 /* dir is encrypted with a valid key */
->>>>>>> ad9aa4f... fs crypto: move per-file encryption from f2fs tree to fs/crypto
 
 extern seqlock_t rename_lock;
 
