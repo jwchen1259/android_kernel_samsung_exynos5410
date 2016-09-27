@@ -1,0 +1,218 @@
+#!/sbin/busybox sh
+
+cat << CTAG
+{
+    name:Misc,
+    elements:[
+ 	{ SPane:{
+		title:"SPI CRC Settings",
+		description:" Enabling software CRCs on the data blocks can be a significant (30%) performance cost, and for other reasons may not always be desired. CRC is a mechanism aiming to prevent data corruption when enabled (reduce the performance around 30%). So if you disable it (improve the performance), there may be a chance you run into problems. Use it at your risk. Default is Disabled.",
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+        { SOptionList:{
+		default:$(cat /sys/module/mmc_core/parameters/use_spi_crc),
+		action:"generic /sys/module/mmc_core/parameters/use_spi_crc",
+		values:{
+			"N":"Disabled",
+			"Y":"Enabled",
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Scrolling Cache control",
+		description:" Disable to increase in-app scrolling speed and responsiveness. Default is (2). REBOOT REQUIRED !!"
+	}},
+	{ SDescription:{
+		description:"\n 0- force to enable regardless of app setting.\n 1- enable unless app specifies.\n 2- disable unless app specifies.\n 3- force to disable regardless of app setting.\n"
+	}},
+	{ SOptionList:{
+		default:2,
+                action:"devtools scr_cache",
+		values:[0, 1, 2, 3,]
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Randomisation",
+		description:"Disabling (0) virtual address randomisation may improve GUI responsiveness."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"randomize_va_space",
+		description:" ",
+		max:2,
+		min:0,
+		step:1,
+		default:$(cat /proc/sys/kernel/randomize_va_space),
+		action:"generic /proc/sys/kernel/randomize_va_space"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Android Logger",
+		description:"You must Enable to save the latest logcat. Default is Enabled."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"Enable Android logger",
+		description:"Default is Disabled.\n",
+		default:$(cat /sys/module/logger/parameters/enabled),
+		action:"generic /sys/module/logger/parameters/enabled",
+		values:{ 0:"Disabled", 1:"Enabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Save logcat",
+		action:"log logcat"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Save dmesg",
+		action:"log dmesg"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Save last_kmsg",
+		action:"log kmsg"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Battery Scaling Calibration",
+		description:" If you are having incorrect battery SCALING issues, this will reset your device battery % to scale correctly to the approximate available mV. Give it a few hours after you reset the gauge. It may still show you funny values for that period, then the battery percentage should be fine after a full charge cycle."
+	}},
+
+	{ SSpacer:{
+		height:1
+	}},
+	{ SDescription:{
+		description:" 1- Push button < Reset Fuel-Gauge Chip Now >"
+	}},
+	{ SDescription:{
+		description:" 2- Reboot device"
+	}},
+	{ SDescription:{
+		description:" 3- Deplete battery to 5-10 % (NOT ZERO)"
+	}},
+	{ SDescription:{
+		description:" 4- Charge UNINTERUPTED until FULL (don't touch)"
+	}},
+	{ SDescription:{
+		description:" 5- Unplug then use normally. Device should re-calibrate itself"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Reset Fuel-Gauge Chip Now",
+		action:"fuel-gauge fuel-gauge"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Optimize Databases"
+	}},
+	{ SDescription:{
+		description:" Use this button to SQlite (defrag/reindex) all databases found in /data & /sdcard, this increases database read/write performance. Frequent inserts, updates, and deletes can cause the database file to become fragmented - where data for a single table or index is scattered around the database file. Running VACUUM ensures that each table and index is largely stored contiguously within the database file. In some cases, VACUUM may also reduce the number of partially filled pages in the database, reducing the size of the database file further."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SDescription:{
+		description:" NOTE: This process can take from 1-2 minutes and device may be UNRESPONSIVE during this time, PLEASE WAIT for the process to finish ! An error just means that some databases weren't succesful. Log output to /sdcard/nvm/Logs/SQLite.txt."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Optimize Databases",
+		action:"devtools optimizedb"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"File System Trim"
+	}},
+	{ SDescription:{
+		description:" Android 4.4.2+ has a feature that auto trims partitions during suspend and only when certain condtions are met. FSTrim is more of a maintenance binary, where Android file systems are prone to lag over time and prevalent as your internal storage is used up. Manually trimming may help retain consistant IO throughput with user control. If you wish to manually trim System, Data and Cache partitions, then press the button below."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SDescription:{
+		description:" NOTE: This process can take from 1-2 minutes and device may be UNRESPONSIVE during this time, PLEASE WAIT for the process to finish."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"FSTrim",
+		action:"devtools fstrim"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Wipe Options",
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Wipe Cache Reboot",
+		action:"devtools wipe_cache_reboot"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Wipe Dalvik-Cache Reboot",
+		action:"devtools wipe_dalvik_reboot"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Wipe Cache & Dalvik-Cache Reboot",
+		action:"devtools wipe_cache-dalvik_reboot"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Wipe Junk Folders",
+		description:" * clipboard-cache\n * tombstones\n * anr logs\n * dropbox logs\n * lost+found"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Clean up Junk",
+		action:"devtools clean_up"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+    ]
+}
+CTAG
