@@ -244,8 +244,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = ccache gcc
 HOSTCXX      = ccache g++
-HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -Ofast -fomit-frame-pointer
-HOSTCXXFLAGS = -Ofast
+HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O3 -fomit-frame-pointer
+HOSTCXXFLAGS = -O3
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -346,16 +346,25 @@ CHECK		= sparse
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
-CFLAGS_MODULE   = -DMODULE -munaligned-access -mfpu=neon-vfpv4 -marm \
-				-funsafe-math-optimizations \
-				-pipe
-AFLAGS_MODULE   = -DMODULE -munaligned-access -mfpu=neon-vfpv4 -marm \
-				-funsafe-math-optimizations \
-				-pipe
+CFLAGS_MODULE   = -munaligned-access -mfpu=neon-vfpv4 \
+		  -fgcse-after-reload -fgcse-sm \
+		  -fgcse-las -ftree-loop-im -ftree-loop-ivcanon -fweb \
+		  -frename-registers -ftree-loop-linear -ftree-vectorize \
+		  -fmodulo-sched -ffast-math \
+		  -funsafe-math-optimizations
+AFLAGS_MODULE   = -munaligned-access -mfpu=neon-vfpv4 \
+		  -fgcse-after-reload -fgcse-sm \
+		  -fgcse-las -ftree-loop-im -ftree-loop-ivcanon -fweb \
+		  -frename-registers -ftree-loop-linear -ftree-vectorize \
+		  -fmodulo-sched -ffast-math \
+		  -funsafe-math-optimizations
 LDFLAGS_MODULE  = --strip-debug
-CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 -marm \
-				-funsafe-math-optimizations \
-				-pipe
+CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 \
+		  -fgcse-after-reload -fgcse-sm \
+		  -fgcse-las -ftree-loop-im -ftree-loop-ivcanon -fweb \
+		  -frename-registers -ftree-loop-linear -ftree-vectorize \
+		  -fmodulo-sched -ffast-math \
+		  -funsafe-math-optimizations
 AFLAGS_KERNEL	= 
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -370,18 +379,19 @@ LINUXINCLUDE    := -I$(srctree)/arch/$(hdr-arch)/include \
 KBUILD_CPPFLAGS := -D__KERNEL__
 
 KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
-				-DNDEBUG -funsafe-loop-optimizations \
- 				-fno-strict-aliasing -fno-common \
- 				-Wno-format-security -Wno-unused \
- 				-fno-delete-null-pointer-checks \
- 				-Wno-maybe-uninitialized \
- 				-Wno-sizeof-pointer-memaccess \
- 				-Wno-error=unused-parameter -Wno-error=unused-but-set-variable \
- 				-fno-exceptions -Wno-multichar -Wno-sequence-point \
-				-fno-delete-null-pointer-checks \
-				-munaligned-access -mfpu=neon-vfpv4 -marm \
-				-funsafe-math-optimizations \
-				-pipe
+		   -fno-strict-aliasing -fno-common \
+		   -Werror-implicit-function-declaration \
+		   -Wno-deprecated-declarations \
+	 	   -Wno-maybe-uninitialized \
+		   -Wno-format-security -Wno-unused \
+		   -Wno-array-bounds \
+		   -fno-delete-null-pointer-checks \
+		   -munaligned-access -mfpu=neon-vfpv4 -marm \
+		   -fgcse-after-reload -fgcse-sm \
+		   -fgcse-las -ftree-loop-im -ftree-loop-ivcanon -fweb \
+		   -frename-registers -ftree-loop-linear -ftree-vectorize \
+		   -fmodulo-sched -ffast-math -pipe \
+		   -funsafe-math-optimizations
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
@@ -574,7 +584,7 @@ all: vmlinux
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os
 else
-KBUILD_CFLAGS	+= -Ofast
+KBUILD_CFLAGS	+= -O3
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
