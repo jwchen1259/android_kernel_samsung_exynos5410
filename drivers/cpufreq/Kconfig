@@ -287,12 +287,6 @@ config CPU_FREQ_GOV_ONDEMAND_SEC
 	  'ondemand-sec' - Samsung's variation of ondemand found on
 	  Universal5410 platforms.
 
-config CPU_FREQ_GOV_IMPULSE
-	tristate "'impulse' cpufreq policy governor"
-	help
-	  'impulse' - This driver adds a dynamic cpufreq policy governor
-	  designed for optimized balance between power and performance.
-
 config CPU_FREQ_GOV_ALUCARD
  tristate "'alucard' cpufreq governor"
  depends on CPU_FREQ

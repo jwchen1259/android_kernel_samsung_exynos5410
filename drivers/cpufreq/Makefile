@@ -24,7 +24,6 @@ obj-$(CONFIG_CPU_FREQ_GOV_LIONHEART)		+= cpufreq_lionheart.o
 obj-$(CONFIG_CPU_FREQ_GOV_DARKNESS)		+= cpufreq_darkness.o
 obj-$(CONFIG_CPU_FREQ_GOV_INTELLIMM)	        += cpufreq_intellimm.o
 obj-$(CONFIG_CPU_FREQ_GOV_INTELLIMM)	        += cpufreq_alucard.o
-obj-$(CONFIG_CPU_FREQ_GOV_INTELLIMM)	        += cpufreq_impulse.o
 
 
 
