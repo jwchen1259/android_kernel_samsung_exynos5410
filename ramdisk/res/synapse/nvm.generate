@@ -1,0 +1,33 @@
+#!/sbin/busybox sh
+
+cat << CTAG
+
+{
+    sections: [
+                `. /res/synapse/nvm.myabout`,
+                `. /res/synapse/nvm.cpufreq`,
+                `. /res/synapse/nvm.cpuvolt`,
+		`. /res/synapse/nvm.cpugovernor`,
+		`. /res/synapse/nvm.hotplug`,
+		`. /res/synapse/nvm.gpu`,
+		`. /res/synapse/nvm.intmif`,
+		`. /res/synapse/nvm.audio`,
+		`. /res/synapse/nvm.screen`,
+		`. /res/synapse/nvm.battery`,
+		`. /res/synapse/nvm.qos`,
+		`. /res/synapse/nvm.led`,
+		`. /res/synapse/nvm.network`,
+		`. /res/synapse/nvm.io`,
+		`. /res/synapse/nvm.lmk`,
+                `. /res/synapse/nvm.memory`,
+                `. /res/synapse/nvm.entropy`,
+                `. /res/synapse/nvm.powersuspend`,
+		`. /res/synapse/nvm.misc`,
+		`. /res/synapse/nvm.doze`,
+		`. /res/synapse/nvm.cortex`,
+		`. /res/synapse/nvm.crontab`,
+		`. /res/synapse/nvm.backup-restore`,
+    ]
+}
+CTAG
+
