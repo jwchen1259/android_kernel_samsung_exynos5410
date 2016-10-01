@@ -1968,21 +1968,6 @@ illinois, ]
 	{ SSpacer:{
 		height:1
 	}},
-	{ SPane:{
-		title:"Wifi power management",
-	}},
-	{ SOptionList:{
-		title:"Wifi power settings",
-		description:" Enable or disable modem wakelock for battery saving. Default is Disabled.\n",
-                default:0,
-		action:"generic /data/.psm.info",
-		values:{
-			0:"Minimum", 1:"Medium", 2:"Maximum"
-		}
-	}},
-	{ SSpacer:{
-		height:1
-	}},
     ]
 },
 		{
