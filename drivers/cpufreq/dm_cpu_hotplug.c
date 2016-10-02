@@ -28,8 +28,8 @@
 #undef DEBUG_HOTPLUG
 
 #define	COLD_THRESHOLD	20
-#define NORMALMAX_FREQ	1900000
-#define NORMALMIN_FREQ	250000
+#define NORMALMAX_FREQ	1600000
+#define NORMALMIN_FREQ	350000
 #define POLLING_MSEC	100
 
 struct cpu_load_info {
@@ -57,7 +57,7 @@ extern unsigned int get_hotplug_cpu_down_hysteresis(void);
 
 static unsigned int hotplug_enabled_flag = 1;
 static unsigned int hotplug_cpu_up_load_value = 0;
-static unsigned int hotplug_cpu_up_boost_value = 0;
+static unsigned int hotplug_cpu_up_boost_value = 50;
 static unsigned int hotplug_cpu_down_hysteresis_value = 20;
 static s64 hotplug_cpu_down_delay_value = 300000000;
 static bool hotplug_need_boost;
