@@ -34,7 +34,7 @@
  * It helps to keep variable names smaller, simpler
  */
 #define B_MAX_FREQ	(2000000)
-#define L_MAX_FREQ	(350000)
+#define L_MAX_FREQ	(750000)
 
 #define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(3)
 #define DEF_FREQUENCY_UP_THRESHOLD		(80)
