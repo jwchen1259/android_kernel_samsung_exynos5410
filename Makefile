@@ -346,16 +346,12 @@ CHECK		= sparse
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
-CFLAGS_MODULE   = -munaligned-access -mfpu=neon-vfpv4 \
-		  -fmodulo-sched -ffast-math \
-		  -funsafe-math-optimizations
-AFLAGS_MODULE   = -munaligned-access -mfpu=neon-vfpv4 \
-		  -fmodulo-sched -ffast-math \
-		  -funsafe-math-optimizations
-LDFLAGS_MODULE  = --strip-debug
+CFLAGS_MODULE   = -munaligned-access -fno-pic -mfpu=neon-vfpv4 \
+		  -pipe
+AFLAGS_MODULE   =
+LDFLAGS_MODULE  = $(LDFLAGS) --strip-debug
 CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 \
-		  -fmodulo-sched -ffast-math -pipe \
-		  -funsafe-math-optimizations
+		  -pipe
 AFLAGS_KERNEL	= 
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -370,16 +366,15 @@ LINUXINCLUDE    := -I$(srctree)/arch/$(hdr-arch)/include \
 KBUILD_CPPFLAGS := -D__KERNEL__
 
 KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
-		   -fno-strict-aliasing -fno-common \
-		   -Werror-implicit-function-declaration \
-		   -Wno-deprecated-declarations \
-	 	   -Wno-maybe-uninitialized \
-		   -Wno-format-security -Wno-unused \
-		   -Wno-array-bounds \
-		   -fno-delete-null-pointer-checks \
-		   -munaligned-access -mfpu=neon-vfpv4 -marm \
-		   -fmodulo-sched -ffast-math -pipe \
-		   -funsafe-math-optimizations
+ 				-fno-strict-aliasing -fno-common \
+ 				-Wno-format-security -Wno-unused \
+ 				-fno-delete-null-pointer-checks \
+ 				-Wno-maybe-uninitialized \
+ 				-Wno-sizeof-pointer-memaccess \
+ 				-Wno-error=unused-parameter -Wno-error=unused-but-set-variable \
+ 				-fno-exceptions -Wno-multichar -Wno-sequence-point \
+				-fno-delete-null-pointer-checks \
+				$(CFLAGS_CGOV)
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
