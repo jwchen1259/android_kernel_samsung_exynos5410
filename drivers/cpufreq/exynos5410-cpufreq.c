@@ -742,7 +742,7 @@ static void __init set_volt_table_CA7(void)
 				exynos5410_volt_table_CA7[i]);
 	}
 
-	max_support_idx_CA7 = L0;	
+	max_support_idx_CA7 = L2;	
 
 	min_support_idx_CA7 = L13;
 }
