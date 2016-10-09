@@ -350,7 +350,7 @@ CFLAGS_MODULE   = -munaligned-access -fno-pic -mfpu=neon-vfpv4 \
 		  -pipe
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  = $(LDFLAGS) --strip-debug
-CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 - marm \
+CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 -marm \
 		  -fmodulo-sched -pipe \
 		  -funsafe-math-optimizations
 AFLAGS_KERNEL	= 
