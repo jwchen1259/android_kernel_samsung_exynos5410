@@ -22,11 +22,6 @@
 #include <linux/notifier.h>
 #include <linux/sort.h>
 #include <linux/err.h>
-<<<<<<< HEAD
-#include <linux/of.h>
-#include <linux/sched.h>
-=======
->>>>>>> parent of 31190ab... cpufreq_stats: Adds the fucntionality to load current values for each frequency
 #include <asm/cputime.h>
 
 static spinlock_t cpufreq_stats_lock;
@@ -136,7 +131,6 @@ static int get_index_all_cpufreq_stat(struct all_cpufreq_stats *all_stat,
 	return -1;
 }
 
-<<<<<<< HEAD
 void acct_update_power(struct task_struct *task, cputime_t cputime) {
 	struct cpufreq_power_stats *powerstats;
 	struct cpufreq_stats *stats;
@@ -156,31 +150,6 @@ void acct_update_power(struct task_struct *task, cputime_t cputime) {
 }
 EXPORT_SYMBOL_GPL(acct_update_power);
 
-static ssize_t show_current_in_state(struct kobject *kobj,
-		struct kobj_attribute *attr, char *buf)
-{
-	ssize_t len = 0;
-	unsigned int i, cpu;
-	struct cpufreq_power_stats *powerstats;
-
-	spin_lock(&cpufreq_stats_lock);
-	for_each_possible_cpu(cpu) {
-		powerstats = per_cpu(cpufreq_power_stats, cpu);
-		if (!powerstats)
-			continue;
-		len += scnprintf(buf + len, PAGE_SIZE - len, "CPU%d:", cpu);
-		for (i = 0; i < powerstats->state_num; i++)
-			len += scnprintf(buf + len, PAGE_SIZE - len,
-					"%d=%d ", powerstats->freq_table[i],
-					powerstats->curr[i]);
-		len += scnprintf(buf + len, PAGE_SIZE - len, "\n");
-	}
-	spin_unlock(&cpufreq_stats_lock);
-	return len;
-}
-
-=======
->>>>>>> parent of 31190ab... cpufreq_stats: Adds the fucntionality to load current values for each frequency
 static ssize_t show_all_time_in_state(struct kobject *kobj,
 		struct kobj_attribute *attr, char *buf)
 {
