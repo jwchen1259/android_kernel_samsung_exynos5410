@@ -33,30 +33,30 @@
  * dbs is used in this file as a shortform for demandbased switching
  * It helps to keep variable names smaller, simpler
  */
-#define B_MAX_FREQ	(1600000)
-#define L_MAX_FREQ	(600000)
+#define B_MAX_FREQ	(1400000)
+#define L_MAX_FREQ	(350000)
 
 #define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(3)
-#define DEF_FREQUENCY_UP_THRESHOLD		(80)
+#define DEF_FREQUENCY_UP_THRESHOLD		(70)
 #define DEF_SAMPLING_DOWN_FACTOR		(1)
-#define DEF_FREQUENCY_STEP_ZONE			(800000)
+#define DEF_FREQUENCY_STEP_ZONE			(700000)
 #define MAX_SAMPLING_DOWN_FACTOR		(100000)
 #define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(3)
-#define MICRO_FREQUENCY_UP_THRESHOLD		(96)
-#define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(50000)
+#define MICRO_FREQUENCY_UP_THRESHOLD		(90)
+#define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(60000)
 #define MIN_FREQUENCY_UP_THRESHOLD		(10)
 #define MAX_FREQUENCY_UP_THRESHOLD		(100)
 #define MAX_FREQ_BLANK				B_MAX_FREQ
 
-#define DEF_FREQUENCY_UP_THRESHOLD_L		(75)
+#define DEF_FREQUENCY_UP_THRESHOLD_L		(70)
 #define DEF_FREQUENCY_UP_STEP_LEVEL_B		(900000)
 #define DEF_FREQUENCY_UP_STEP_LEVEL_L		L_MAX_FREQ
-#define DEF_FREQUENCY_DOWN_STEP_LEVEL           (800000)
+#define DEF_FREQUENCY_DOWN_STEP_LEVEL           (700000)
 #define DEF_FREQUENCY_DOWN_DIFFER_L		(20)
 #define DEF_FREQUENCY_HIGH_ZONE			(1000000)
 #define DEF_FREQUENCY_CONSERVATIVE_STEP		(100000)
 #define MICRO_FREQUENCY_UP_THRESHOLD_H		(90)
-#define MICRO_FREQUENCY_UP_THRESHOLD_L		(85)
+#define MICRO_FREQUENCY_UP_THRESHOLD_L		(80)
 #define MICRO_FREQUENCY_UP_STEP_LEVEL_B		(900000)
 #define MICRO_FREQUENCY_UP_STEP_LEVEL_L		L_MAX_FREQ
 #define MICRO_FREQUENCY_DOWN_STEP_LEVEL		(100000)
@@ -78,7 +78,7 @@
 
 static unsigned int min_sampling_rate;
 
-#define LATENCY_MULTIPLIER			(600)
+#define LATENCY_MULTIPLIER			(700)
 #define MIN_LATENCY_MULTIPLIER			(20)
 #define TRANSITION_LATENCY_LIMIT		(10 * 1000 * 1000)
 
@@ -164,7 +164,7 @@ static struct dbs_tuners {
 	.down_differ_l = DEF_FREQUENCY_DOWN_DIFFER_L,
 	.high_freq_zone = DEF_FREQUENCY_HIGH_ZONE,
 	.conservative_step = DEF_FREQUENCY_CONSERVATIVE_STEP,
-	.up_conservative_mode = true,
+	.up_conservative_mode = false,
 	.max_freq_blank = MAX_FREQ_BLANK,
 	.boost_mode = false,
 };

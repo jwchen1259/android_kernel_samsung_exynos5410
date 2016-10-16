@@ -208,11 +208,6 @@ static int cpu_pm_suspend(void)
 {
 	int ret;
 
-#ifdef CONFIG_SEC_PM
-	if (FLAG_T32_EN)
-		goto out;
-#endif
-
 	ret = cpu_pm_enter();
 	if (ret)
 		return ret;
