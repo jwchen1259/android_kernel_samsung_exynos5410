@@ -8,7 +8,6 @@
  * Modified by Jaegeuk Kim, 2015.
  */
 
-#include <linux/module.h>
 #include <linux/random.h>
 #include <linux/string.h>
 #include <linux/fscrypto.h>

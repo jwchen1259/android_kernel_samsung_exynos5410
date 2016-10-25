@@ -22,9 +22,6 @@
 #include <linux/mfd/max77803.h>
 #include <linux/mfd/max77803-private.h>
 
-#define ceil(x, y) \
-        ({ unsigned long __x = (x), __y = (y); (__x + __y - 1) / __y; })
-
 #define TEST_MODE_TIME 10000
 #ifdef CONFIG_VIBRATOR_CM
 #define ceil(x, y) \

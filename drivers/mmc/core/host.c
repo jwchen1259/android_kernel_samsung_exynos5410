@@ -32,7 +32,6 @@
 static void mmc_host_classdev_release(struct device *dev)
 {
 	struct mmc_host *host = cls_dev_to_mmc_host(dev);
-	kfree(host->wlock_name);
 	kfree(host);
 }
 
@@ -330,10 +329,8 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
 
 	spin_lock_init(&host->lock);
 	init_waitqueue_head(&host->wq);
-	host->wlock_name = kasprintf(GFP_KERNEL,
-			"%s_detect", mmc_hostname(host));
 	wake_lock_init(&host->detect_wake_lock, WAKE_LOCK_SUSPEND,
-			host->wlock_name);
+		kasprintf(GFP_KERNEL, "%s_detect", mmc_hostname(host)));
 	INIT_DELAYED_WORK(&host->detect, mmc_rescan);
 #ifdef CONFIG_PM
 	host->pm_notify.notifier_call = mmc_pm_notify;

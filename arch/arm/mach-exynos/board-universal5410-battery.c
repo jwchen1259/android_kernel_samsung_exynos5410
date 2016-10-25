@@ -666,14 +666,14 @@ sec_battery_platform_data_t sec_battery_pdata = {
 #if defined(CONFIG_MACH_J_CHN_CTC)
 	.full_condition_vcell = 4150,
 #else
-	.full_condition_vcell = 4300,
+	.full_condition_vcell = 4250,
 #endif
 
 	.recharge_check_count = 2,
 	.recharge_condition_type =
 		SEC_BATTERY_RECHARGE_CONDITION_VCELL,
 	.recharge_condition_soc = 98,
-	.recharge_condition_vcell = 4350,
+	.recharge_condition_vcell = 4300,
 
 	.charging_total_time = 6 * 60 * 60,
 	.recharging_total_time =  90 * 60,

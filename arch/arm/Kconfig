@@ -141,9 +141,10 @@ config GENERIC_LOCKBREAK
 
 config RWSEM_GENERIC_SPINLOCK
 	bool
+	default y
 
 config RWSEM_XCHGADD_ALGORITHM
-	def_bool y
+	bool
 
 config ARCH_HAS_ILOG2_U32
 	bool
@@ -1693,7 +1694,14 @@ config ARCH_NR_GPIO
 
 source kernel/Kconfig.preempt
 
-source kernel/Kconfig.hz
+config HZ
+	int
+	default 200 if ARCH_EBSA110 || ARCH_S3C24XX || ARCH_S5P64X0 || \
+		ARCH_S5PV210 || ARCH_EXYNOS
+	default OMAP_32K_TIMER_HZ if ARCH_OMAP && OMAP_32K_TIMER
+	default AT91_TIMER_HZ if ARCH_AT91
+	default SHMOBILE_TIMER_HZ if ARCH_SHMOBILE
+	default 100
 
 config THUMB2_KERNEL
 	bool "Compile the kernel in Thumb-2 mode (EXPERIMENTAL)"

@@ -573,7 +573,7 @@ int key_reject_and_link(struct key *key,
 
 	mutex_unlock(&key_construction_mutex);
 
-	if (keyring && link_ret == 0)
+	if (keyring)
 		__key_link_end(keyring, key->type, prealloc);
 
 	/* wake up anyone waiting for a key to be constructed */
@@ -953,28 +953,6 @@ void key_revoke(struct key *key)
 	up_write(&key->sem);
 }
 EXPORT_SYMBOL(key_revoke);
-
-/**
- * key_invalidate - Invalidate a key.
- * @key: The key to be invalidated.
- *
- * Mark a key as being invalidated and have it cleaned up immediately.  The key
- * is ignored by all searches and other operations from this point.
- */
-void key_invalidate(struct key *key)
-{
-	kenter("%d", key_serial(key));
-
-	key_check(key);
-
-	if (!test_bit(KEY_FLAG_INVALIDATED, &key->flags)) {
-		down_write_nested(&key->sem, 1);
-		if (!test_and_set_bit(KEY_FLAG_INVALIDATED, &key->flags))
-			key_schedule_gc_links();
-		up_write(&key->sem);
-	}
-}
-EXPORT_SYMBOL(key_invalidate);
 
 /**
  * register_key_type - Register a type of key.

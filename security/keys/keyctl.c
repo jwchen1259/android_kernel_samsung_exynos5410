@@ -375,37 +375,6 @@ error:
 }
 
 /*
- * Invalidate a key.
- *
- * The key must be grant the caller Invalidate permission for this to work.
- * The key and any links to the key will be automatically garbage collected
- * immediately.
- *
- * If successful, 0 is returned.
- */
-long keyctl_invalidate_key(key_serial_t id)
-{
-	key_ref_t key_ref;
-	long ret;
-
-	kenter("%d", id);
-
-	key_ref = lookup_user_key(id, 0, KEY_SEARCH);
-	if (IS_ERR(key_ref)) {
-		ret = PTR_ERR(key_ref);
-		goto error;
-	}
-
-	key_invalidate(key_ref_to_ptr(key_ref));
-	ret = 0;
-
-	key_ref_put(key_ref);
-error:
-	kleave(" = %ld", ret);
-	return ret;
-}
-
-/*
  * Clear the specified keyring, creating an empty process keyring if one of the
  * special keyring IDs is used.
  *
@@ -733,16 +702,16 @@ long keyctl_read_key(key_serial_t keyid, char __user *buffer, size_t buflen)
 
 	/* the key is probably readable - now try to read it */
 can_read_key:
-	ret = -EOPNOTSUPP;
-	if (key->type->read) {
-		/* Read the data with the semaphore held (since we might sleep)
-		 * to protect against the key being updated or revoked.
-		 */
-		down_read(&key->sem);
-		ret = key_validate(key);
-		if (ret == 0)
+	ret = key_validate(key);
+	if (ret == 0) {
+		ret = -EOPNOTSUPP;
+		if (key->type->read) {
+			/* read the data with the semaphore held (since we
+			 * might sleep) */
+			down_read(&key->sem);
 			ret = key->type->read(key, buffer, buflen);
-		up_read(&key->sem);
+			up_read(&key->sem);
+		}
 	}
 
 error2:
@@ -1652,9 +1621,6 @@ SYSCALL_DEFINE5(keyctl, int, option, unsigned long, arg2, unsigned long, arg3,
 			(const struct iovec __user *) arg3,
 			(unsigned) arg4,
 			(key_serial_t) arg5);
-
-	case KEYCTL_INVALIDATE:
-		return keyctl_invalidate_key((key_serial_t) arg2);
 
 	default:
 		return -EOPNOTSUPP;

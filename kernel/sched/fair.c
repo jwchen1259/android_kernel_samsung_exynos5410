@@ -2734,18 +2734,25 @@ find_idlest_cpu(struct sched_group *group, struct task_struct *p, int this_cpu)
  */
 static int select_idle_sibling(struct task_struct *p, int target)
 {
+	int cpu = smp_processor_id();
+	int prev_cpu = task_cpu(p);
 	struct sched_domain *sd;
 	struct sched_group *sg;
-	int i = task_cpu(p);
-
-	if (idle_cpu(target))
-		return target;
+	int i;
 
 	/*
-	 * If the prevous cpu is cache affine and idle, don't be stupid.
+	 * If the task is going to be woken-up on this cpu and if it is
+	 * already idle, then it is the right target.
 	 */
-	if (i != target && cpus_share_cache(i, target) && idle_cpu(i))
-		return i;
+	if (target == cpu && idle_cpu(cpu))
+		return cpu;
+
+	/*
+	 * If the task is going to be woken-up on the cpu where it previously
+	 * ran and if it is currently idle, then it the right target.
+	 */
+	if (target == prev_cpu && idle_cpu(prev_cpu))
+		return prev_cpu;
 
 	/*
 	 * Otherwise, iterate the domains and find an elegible idle cpu.
@@ -2759,7 +2766,7 @@ static int select_idle_sibling(struct task_struct *p, int target)
 				goto next;
 
 			for_each_cpu(i, sched_group_cpus(sg)) {
-				if (i == target || !idle_cpu(i))
+				if (!idle_cpu(i))
 					goto next;
 			}
 
@@ -3183,8 +3190,6 @@ struct lb_env {
 	unsigned int		loop_max;
 };
 
-static DEFINE_PER_CPU(bool, dbs_boost_needed);
-
 /*
  * move_task - move a task from one runqueue to another runqueue.
  * Both runqueues must be locked.
@@ -3195,8 +3200,6 @@ static void move_task(struct task_struct *p, struct lb_env *env)
 	set_task_cpu(p, env->dst_cpu);
 	activate_task(env->dst_rq, p, 0);
 	check_preempt_curr(env->dst_rq, p, 0);
-	if (task_notify_on_migrate(p))
-		per_cpu(dbs_boost_needed, env->dst_cpu) = true;
 }
 
 /*
@@ -4629,15 +4632,9 @@ more_balance:
 			 */
 			sd->nr_balance_failed = sd->cache_nice_tries+1;
 		}
-	} else {
+	} else
 		sd->nr_balance_failed = 0;
-		if (per_cpu(dbs_boost_needed, this_cpu)) {
-			per_cpu(dbs_boost_needed, this_cpu) = false;
-			atomic_notifier_call_chain(&migration_notifier_head,
-						   this_cpu,
-						   (void *)cpu_of(busiest));
-		}
-	}
+
 	if (likely(!active_balance)) {
 		/* We were unbalanced, so reset the balancing interval */
 		sd->balance_interval = sd->min_interval;
@@ -4792,12 +4789,6 @@ static int active_load_balance_cpu_stop(void *data)
 out_unlock:
 	busiest_rq->active_balance = 0;
 	raw_spin_unlock_irq(&busiest_rq->lock);
-	if (per_cpu(dbs_boost_needed, target_cpu)) {
-		per_cpu(dbs_boost_needed, target_cpu) = false;
-		atomic_notifier_call_chain(&migration_notifier_head,
-					   target_cpu,
-					   (void *)cpu_of(busiest_rq));
-	}
 	return 0;
 }
 
