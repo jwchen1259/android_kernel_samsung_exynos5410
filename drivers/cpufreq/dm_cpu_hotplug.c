@@ -25,8 +25,8 @@
 #include <linux/suspend.h>
 
 #define	COLD_THRESHOLD	20
-#define NORMALMAX_FREQ	1400000
-#define NORMALMIN_FREQ	400000
+#define NORMALMAX_FREQ	1600000
+#define NORMALMIN_FREQ	350000
 #define POLLING_MSEC	20
 
 struct cpu_load_info {
