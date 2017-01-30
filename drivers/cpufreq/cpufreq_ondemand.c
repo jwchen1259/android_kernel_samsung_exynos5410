@@ -58,7 +58,7 @@
 #define MICRO_FREQUENCY_DOWN_STEP_LEVEL		(250000)
 #define MICRO_FREQUENCY_DOWN_DIFFER_L		(20)
 #define MIN_FREQUENCY_UP_STEP_LEVEL		(100000)
-#define MAX_FREQUENCY_UP_STEP_LEVEL		(1800000)
+#define MAX_FREQUENCY_UP_STEP_LEVEL		(1600000)
 
 /*
  * The polling frequency of this governor depends on the capability of
