@@ -353,7 +353,7 @@ CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 -ffast-math \
 		  -fgcse-after-reload -fgcse-sm \
 		  -fgcse-las -ftree-loop-im -ftree-loop-ivcanon -fweb \
 		  -frename-registers -ftree-vectorize \
-		  -ffast-math -mvectorize-with-neon-quad -fmodulo-sched \
+		  -mvectorize-with-neon-quad -fmodulo-sched \
 		  -funsafe-math-optimizations \
 		  -std=gnu89
 AFLAGS_KERNEL	= 
