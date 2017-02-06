@@ -72,7 +72,7 @@ static unsigned int hotplug_enabled_flag = 1;
 static unsigned int hotplug_cpu_up_load_value = 0;
 static unsigned int hotplug_cpu_up_boost_value = 50;
 static unsigned int normalmin_freq_value = 350000;
-static unsigned int hotplug_cpu_down_hysteresis_value = 25;
+static unsigned int hotplug_cpu_down_hysteresis_value = 20;
 #endif
 
 #define lock_policy_rwsem(mode, cpu)					\
