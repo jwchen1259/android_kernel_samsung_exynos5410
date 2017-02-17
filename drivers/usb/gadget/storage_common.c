@@ -701,9 +701,6 @@ static int fsg_lun_open(struct fsg_lun *curlun, const char *filename)
 		min_sectors = 300;	/* Smallest track is 300 frames */
 		if (num_sectors >= 256*60*75) {
 			num_sectors = 256*60*75 - 1;
-			LINFO(curlun, "file too big: %s\n", filename);
-			LINFO(curlun, "using only first %d blocks\n",
-					(int) num_sectors);
 		}
 	}
 	if (num_sectors < min_sectors) {
