@@ -158,12 +158,12 @@ int pr_buffer(const char *tag, const char *data, size_t data_len,
 
 /* print a sk_buff as hex string */
 #define pr_skb(tag, skb) \
-	pr_buffer(tag, (char *)((skb)->data), (size_t)((skb)->len), (size_t)16)
+//	pr_buffer(tag, (char *)((skb)->data), (size_t)((skb)->len), (size_t)16)
 
 /* print a urb as hex string */
 #define pr_urb(tag, urb) \
-	pr_buffer(tag, (char *)((urb)->transfer_buffer), \
-			(size_t)((urb)->actual_length), (size_t)16)
+//	pr_buffer(tag, (char *)((urb)->transfer_buffer), \
+//			(size_t)((urb)->actual_length), (size_t)16)
 
 /* flow control CMD from CP, it use in serial devices */
 int link_rx_flowctl_cmd(struct link_device *ld, const char *data, size_t len);
