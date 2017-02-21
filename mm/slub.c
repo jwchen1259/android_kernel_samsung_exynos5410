@@ -3965,7 +3965,7 @@ struct kmem_cache *kmem_cache_create(const char *name, size_t size,
 		}
 		kfree(s);
 	}
-	kfree(n)
+	kfree(n);
 err:
 	up_write(&slub_lock);
 
