@@ -351,8 +351,7 @@ AFLAGS_MODULE   =
 LDFLAGS_MODULE  = $(LDFLAGS) --strip-debug
 CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 \
 		  -funsafe-math-optimizations \
-		  -ffast-math -pipe \
-		  -marm -mtune=cortex-a15 \
+		  -ffast-math \
 		  -std=gnu89
 AFLAGS_KERNEL	= 
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
