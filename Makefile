@@ -350,7 +350,10 @@ CFLAGS_MODULE   = -munaligned-access -fno-pic -mfpu=neon-vfpv4
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  = $(LDFLAGS) --strip-debug
 CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 \
-		  -funsafe-math-optimizations 
+		  -funsafe-math-optimizations \
+		  -ffast-math -pipe \
+		  -marm -mtune=cortex-a15 \
+		  -std=gnu89
 AFLAGS_KERNEL	= 
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -374,7 +377,7 @@ KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
  				-fno-exceptions -Wno-multichar -Wno-sequence-point \
 				-fno-delete-null-pointer-checks \
 		   		-fdiagnostics-show-option \
-				-std=gnu89 
+				$(CFLAGS_KERNEL)
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
