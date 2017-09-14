@@ -192,7 +192,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
 ARCH		?=arm
-CROSS_COMPILE	?=ccache ../arm-eabi-6.x/bin/arm-eabi-
+CROSS_COMPILE	?=ccache ../kernel-workspace/arm-eabi-6.x/bin/arm-eabi-
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -350,7 +350,12 @@ CFLAGS_MODULE   = -munaligned-access -fno-pic -mfpu=neon-vfpv4
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  = $(LDFLAGS) --strip-debug
 CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 \
-		  -std=gnu89
+		  -fgcse-after-reload -fgcse-sm \
+		  -fgcse-las -ftree-loop-im -ftree-loop-ivcanon -fweb \
+		  -frename-registers -ftree-vectorize \
+		  -ffast-math -mvectorize-with-neon-quad -fmodulo-sched \		
+		  -funsafe-math-optimizations \		
+		  -std=gnu89 
 AFLAGS_KERNEL	= 
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -374,7 +379,7 @@ KBUILD_CFLAGS := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
  				-fno-exceptions -Wno-multichar -Wno-sequence-point \
 				-fno-delete-null-pointer-checks \
 		   		-fdiagnostics-show-option \
-				-std=gnu89
+				$(CFLAGS_KERNEL)
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
