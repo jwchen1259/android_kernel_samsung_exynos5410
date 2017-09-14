@@ -78,8 +78,8 @@ static unsigned int min_sampling_rate;
 static bool lcd_is_on;
 #endif
 
-#define LATENCY_MULTIPLIER			(800)
-#define MIN_LATENCY_MULTIPLIER			(50)
+#define LATENCY_MULTIPLIER			(1000)
+#define MIN_LATENCY_MULTIPLIER			(100)
 #define TRANSITION_LATENCY_LIMIT		(10 * 1000 * 1000)
 
 static struct workqueue_struct *ondemand_wq;
