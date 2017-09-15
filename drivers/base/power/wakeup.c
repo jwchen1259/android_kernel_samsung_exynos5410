@@ -14,9 +14,13 @@
 #include <linux/suspend.h>
 #include <linux/seq_file.h>
 #include <linux/debugfs.h>
+#include <linux/moduleparam.h>
 #include <trace/events/power.h>
 
 #include "power.h"
+
+static bool enable_l2_hsic_ws = true;
+module_param(enable_l2_hsic_ws, bool, 0644);
 
 /*
  * If set, the suspend/hibernate code will abort transitions to a sleep state
@@ -387,6 +391,11 @@ EXPORT_SYMBOL_GPL(device_set_wakeup_enable);
 static void wakeup_source_activate(struct wakeup_source *ws)
 {
 	unsigned int cec;
+
+	if (!enable_l2_hsic_ws && !strcmp(ws->name, "l2_hsic")) {
+		pr_info("wakeup source l2_hsic activate skipped\n");
+		return;
+	}
 
 	ws->active = true;
 	ws->active_count++;
