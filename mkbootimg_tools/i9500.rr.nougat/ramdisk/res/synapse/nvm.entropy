@@ -1,0 +1,42 @@
+#!/system/xbin/busybox sh
+
+BB=/system/xbin/busybox;
+
+cat << CTAG
+{
+    name:Entropy,
+    elements:[
+	{ SPane:{
+		title:"Kernel Entropy"
+      	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SLiveLabel:{
+		title:"Entropy Available",
+		refresh:1000,
+		action:"live entropy"
+	}},
+	{ SSeekBar:{
+		title:"Read Wakeup Threshold",
+        	description:"",
+		max:2048, min:64, step:64,
+		default:$(cat /proc/sys/kernel/random/read_wakeup_threshold),
+		action:"generic /proc/sys/kernel/random/read_wakeup_threshold"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Write Wakeup Threshold",
+        	description:"",
+		max:2048, min:64, step:64,
+		default:$(cat /proc/sys/kernel/random/write_wakeup_threshold),
+		action:"generic /proc/sys/kernel/random/write_wakeup_threshold"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+    ]
+}
+CTAG

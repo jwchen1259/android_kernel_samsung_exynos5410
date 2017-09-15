@@ -1,0 +1,199 @@
+#!/system/xbin/busybox sh
+
+CPUFREQS=""
+
+while read FREQ TIME; do
+	if [ $FREQ -lt 751000 ]; then
+		LABEL=$(expr $FREQ \* 2)
+		LABEL=$(expr $LABEL / 1000)
+		CPUFREQS="$CPUFREQS $FREQ:\"${LABEL}MHz\", "
+	else
+		LABEL=$(expr $FREQ / 1000)
+		CPUFREQS="$CPUFREQS $FREQ:\"${LABEL}MHz\", "
+	fi
+done < /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state
+
+MIFFREQS='800000:"800MHz", 400000:"400MHz", 200000:"200MHz"'
+INTFREQS='400000:"400MHz", 267000:"267MHz", 200000:"200MHz", 160000:"160MHz", 100000:"100MHz", 50000:"50MHz"'
+
+
+cat << CTAG
+{
+    name:TouchScreen,
+    elements:[
+        { SPane:{
+		title:"Touchscreen",
+		description:"Controls the way the touchscreen booster reacts to touches. The screen touch booster has 3 different scales, depending on what the stock framework feeds the touch driver at a given moment." 
+        }},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Nominal booster",
+		description:"The nominal booster scales the CPU, MIF, INT to the below given frequencies, waits for given charge time and then turns off."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"CPU boost frequency",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_cpu_freq_1),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_cpu_freq_1",
+		values:{
+`
+			echo $CPUFREQS
+`
+			, 0:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"Internal boost frequency",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_int_freq_1),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_int_freq_1",
+		values:{
+`
+			echo $INTFREQS
+`
+			, 0:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"Memory boost frequency",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_mif_freq_1),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_mif_freq_1",
+		values:{
+`
+			echo $MIFFREQS
+`
+			, 0:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"Off time",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_charge_time_1),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_charge_time_1",
+		min:0, max:1000, step:20, unit:"ms"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Medium booster",
+		description:"The medium booster acts like the nominal booster, but instead of the off-time acts as a charge-time to the next state with a custom MIF level. It has an independent off-time."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"Memory boost frequency 2",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_mif_freq_2),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_mif_freq_2",
+		values:{
+`
+			echo $MIFFREQS
+`
+			, 0:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"Off time",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_off_time_1),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_off_time_1",
+		min:0, max:1000, step:20, unit:"ms"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"High booster",
+		description:"The high booster scales the CPU, MIF, INT to the below given high frequencies, waits for given charge time and then switches to another CPU frequency, it waits its off-time and then turns off."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"CPU boost frequency",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_cpu_freq_9_0),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_cpu_freq_9_0",
+		values:{
+`
+			echo $CPUFREQS
+`
+			, 0:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"Internal boost frequency",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_int_freq_9),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_int_freq_9",
+		values:{
+`
+			echo $INTFREQS
+`
+			, 0:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"Memory boost frequency",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_mif_freq_9),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_mif_freq_9",
+		values:{
+`
+			echo $MIFFREQS
+`
+			, 0:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"Charge time",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_charge_time_9),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_charge_time_9",
+		min:0, max:1000, step:20, unit:"ms"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"CPU boost frequency 2",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_cpu_freq_9_1),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_cpu_freq_9_1",
+		values:{
+`
+			echo $CPUFREQS
+`
+			, 0:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"Off time",
+		default:$(cat /sys/module/synaptics_i2c_rmi/parameters/qos_off_time_9),
+		action:"generic /sys/module/synaptics_i2c_rmi/parameters/qos_off_time_9",
+		min:0, max:2000, step:20, unit:"ms"
+	}},
+    ]
+}
+CTAG

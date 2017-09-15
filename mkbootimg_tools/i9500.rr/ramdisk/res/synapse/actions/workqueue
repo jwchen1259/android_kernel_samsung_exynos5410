@@ -1,0 +1,26 @@
+
+BB=/system/xbin/busybox;
+
+if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
+	$BB mount -o remount,rw /;
+fi;
+
+case $1 in
+work_queue)
+  P=/sys/module/workqueue/parameters/power_efficient
+  if [[ ! -z $2 ]]; then
+  if [ $2 = "Disabled" ]; then
+    echo N > $P
+  elif [ $2 = "Enabled" ]; then
+    echo Y > $P
+  fi; fi
+  copy=`cat $P`
+  if [ $copy == 0 ]; then
+    echo Disabled
+  elif [ $copy == 1 ]; then
+    echo Enabled
+  fi
+  ;;
+esac
+
+$BB mount -t rootfs -o remount,ro rootfs;

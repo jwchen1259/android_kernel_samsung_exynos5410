@@ -1,0 +1,287 @@
+#!/system/xbin/busybox sh
+
+readColour() {
+	P=/sys/class/misc/mdnie/hook_control/
+	echo $(printf "#%02X%02X%02X\n" $(cat $P/$1_red) $(cat $P/$1_green) $(cat $P/$1_blue))
+}
+
+cat << CTAG
+{
+    name:Screen Advanced,
+    elements:[
+	{ SLiveLabel:{
+		title:"Display brightness",
+		description:"Live panel brightness value 0-255",
+		refresh:500,
+		action:"live actual_brightness"
+        }},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+       			title:"LCD Power Reduce",
+			description:"LCD Power Reduce for backlight. Auto adjust the display brightness based on the on-screen image to save power. If you like brighter screen at the cost of battery drain, then turn it off. Default is Enabled.",
+			default:$(cat /sys/class/lcd/panel/power_reduce),
+			action:"generic /sys/class/lcd/panel/power_reduce",
+			values:{
+				"0":"Disabled",
+				"1":"Enabled",
+			}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"mDNIe global controls",
+		description:"mobile Digital Natural Image engine control. Samsungs hardware image post-processor controls virtually any image manipulation. All control master switches, if left as delta controls, will negate the sequence setting if checked. Master sequence has SCR and CS enabled by default."
+        }},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+       			title:"Register Hook",
+			description:"Register intercept acts like a hook and will enable catching scenario settings and modifying them through delta controls. If a scenario does not have a setting (register) in its base sequence, then it cannot be modified by the hook.",
+			default:$(cat /sys/class/misc/mdnie/hook_intercept),
+			action:"generic /sys/class/misc/mdnie/hook_intercept",
+			values:{
+				"0":"Disabled",
+				"1":"Enabled",
+			}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+       			title:"Master Sequence",
+			description:"Enabling the master sequence will disable and ignore Samsungs profiles and scenarios, the ROM controls will be disabled.",
+			default:$(cat /sys/class/misc/mdnie/sequence_intercept),
+			action:"generic /sys/class/misc/mdnie/sequence_intercept",
+			values:{
+				"0":"Disabled",
+				"1":"Enabled",
+			}
+	}},
+	{ SSpacer:{
+		height:1
+	}},	
+	{ SPane:{
+		title:"Smearing fix",
+		description:"i950X devices have an issue with the AMOLED controller in which, if individial pixels get power-gated for true black, they occur a latency delay when getting powered on again, resulting in a visible smearing effect. The following controls provide a method of applying a slight grey on the black channel to avoid this problem."
+        }},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Greyscale addend",
+		max:5, default:0, weight:0.39, unit:"% white",
+		action:"generic /sys/class/misc/mdnie/black_increase_value"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Digital screen brightness",
+		description:"Uses mDNIe to bypass the backlight driver brightness and decrease brightness by reducing luminance on the the channel RGB values. It allows to reduce brightness beyond the stock minimum."
+        }},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Brightness reduction",
+		description:"The amount of luminance to be shaved off from the colour channel components.",
+		max:128,
+		default:$(cat /sys/class/misc/mdnie/brightness_reduction),
+		action:"generic /sys/class/misc/mdnie/brightness_reduction"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Takeover point",
+		description:"The stock backlight driver ignores brightness values below 10 (0-255) and values below that point do not have any effect on brightness. The takeover point is the point in the brightness curve where the digital brightness reduction takes effect. The brightness reduction is weighted linearly from full configured value to zero on the range of zero brigtness to the takeover point. If the takeover point is beyond 10, then both hardware and digital brightness reduction can take place. This can help with having a less abrupt brightness curve caused by the digital reduction.",
+		max:64,
+		default:$(cat /sys/class/misc/mdnie/brightness_takeover_point),
+		action:"generic /sys/class/misc/mdnie/brightness_takeover_point"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Auto-brightness input delta",
+		description:"Positive delta to be applied on top system brightness. Used only for the digital reduction logic during stock ROM auto-brightness activation, can be used to brighten back up the reduction value by shifting the interpreted brightness value without sacrificing minimum brightness in manual mode.",
+		max:64,
+		default:$(cat /sys/class/misc/mdnie/brightness_input_delta),
+		action:"generic /sys/class/misc/mdnie/brightness_input_delta"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{ title:"Digital edge enhancement control" }},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+       			title:"Edge enhancement",
+			description:"Enable edge enhancement",
+			default:$(cat /sys/class/misc/mdnie/hook_control/s_edge_enhancement),
+			action:"generic /sys/class/misc/mdnie/hook_control/s_edge_enhancement",
+			values:{
+				"0":"Disabled",
+				"1":"Enabled",
+			}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Amount",
+		min:-128, max:128, default:0,
+		action:"generic /sys/class/misc/mdnie/hook_control/de_positive_e"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Radius",
+		min:-128, max:128, default:0,
+		action:"generic /sys/class/misc/mdnie/hook_control/de_positive_f"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Threshold",
+		min:-128, max:128, default:0,
+		action:"generic /sys/class/misc/mdnie/hook_control/de_positive_b"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Chroma saturation control",
+		description:"Chroma saturation works in the HSL colour space, modifying saturation will dilute the hue with white or darken with black. Variations in chroma are achieved by adding different amounts of a neutral gray of the same value as the color you want to alter."
+        }},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Chroma saturation weight",
+		description:"Saturation weight/multiplier for RGB/YCM chroma gains",
+		min:0, max:40, default:$(cat /sys/class/misc/mdnie/hook_control/cs_weight),
+		action:"generic /sys/class/misc/mdnie/hook_control/cs_weight"
+	}},
+	{ SPane:{ description:"Per-channel controls" }},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Red gain",
+		min:0, max:20, default:$(cat /sys/class/misc/mdnie/hook_control/cs_red),
+		action:"generic /sys/class/misc/mdnie/hook_control/cs_red"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Green gain",
+		min:0, max:20, default:$(cat /sys/class/misc/mdnie/hook_control/cs_green),
+		action:"generic /sys/class/misc/mdnie/hook_control/cs_green"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Blue gain",
+		min:0, max:20, default:$(cat /sys/class/misc/mdnie/hook_control/cs_blue),
+		action:"generic /sys/class/misc/mdnie/hook_control/cs_blue"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Yellow gain",
+		min:0, max:20, default:$(cat /sys/class/misc/mdnie/hook_control/cs_yellow),
+		action:"generic /sys/class/misc/mdnie/hook_control/cs_yellow"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Cyan gain",
+		min:0, max:20, default:$(cat /sys/class/misc/mdnie/hook_control/cs_cyan),
+		action:"generic /sys/class/misc/mdnie/hook_control/cs_cyan"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Magenta gain",
+		min:0, max:20, default:$(cat /sys/class/misc/mdnie/hook_control/cs_magenta),
+		action:"generic /sys/class/misc/mdnie/hook_control/cs_magenta"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{ title:"SCR filters" }},
+	{ SSpacer:{
+		height:1
+	}},
+        { SColourPicker:{
+          title:"Red",
+          default:"`echo $(readColour scr_red)`",
+          action:"colour scr_red"
+       	}},
+	{ SSpacer:{
+		height:1
+	}},
+        { SColourPicker:{
+          title:"Green",
+          default:"`echo $(readColour scr_green)`",
+          action:"colour scr_green"
+       	}},
+	{ SSpacer:{
+		height:1
+	}},
+        { SColourPicker:{
+          title:"Blue",
+          default:"`echo $(readColour scr_blue)`",
+          action:"colour scr_blue"
+       	}},
+	{ SSpacer:{
+		height:1
+	}},
+        { SColourPicker:{
+          title:"Yellow",
+          default:"`echo $(readColour scr_yellow)`",
+          action:"colour scr_yellow"
+       	}},
+	{ SSpacer:{
+		height:1
+	}},
+        { SColourPicker:{
+          title:"Cyan",
+          default:"`echo $(readColour scr_cyan)`",
+          action:"colour scr_cyan"
+       	}},
+	{ SSpacer:{
+		height:1
+	}},
+        { SColourPicker:{
+          title:"Magenta",
+          default:"`echo $(readColour scr_magenta)`",
+          action:"colour scr_magenta"
+       	}},
+	{ SSpacer:{
+		height:1
+	}},
+        { SColourPicker:{
+          title:"White",
+          default:"`echo $(readColour scr_white)`",
+          action:"colour scr_white"
+       	}},
+	{ SSpacer:{
+		height:1
+	}},
+    ]
+}
+CTAG

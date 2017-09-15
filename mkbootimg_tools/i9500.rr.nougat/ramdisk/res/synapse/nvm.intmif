@@ -1,0 +1,47 @@
+#!/system/xbin/busybox sh
+
+cat << CTAG
+{
+    name:"MIF",
+    elements:[
+	{ SPane:{ title:"Memory interface voltage control",
+		description:"MIF voltage is the voltage supplied to the memory controller." }},
+`
+while read FREQ VOLT; do
+	echo '{ SSeekBar:{'
+		echo 'title:"'$(expr $FREQ / 1000)' MHz", default:'$VOLT', '
+		echo 'action:"mifvolt '${FREQ}'", unit:"mV", weight:0.001, min:700000, max:1100000, step:6250 }}, '
+done < /sys/class/devfreq/exynos5-busfreq-mif/volt_table
+`
+    ]
+}
+CTAG
+
+: << 'MEMIO'
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{ title:"Internal voltage control",
+		description:"INT voltage is the voltage supplied to the internal auxiliary IP blocks, such as the hardware video decoders, the scaling blocks, the image signal processors, the display controllers, and the MMC controllers." }},
+`
+while read FREQ VOLT; do
+	echo '{ SSeekBar:{'
+		echo 'title:"'$(expr $FREQ / 1000)' MHz", default:'$VOLT', '
+		echo 'action:"intvolt '${FREQ}'", unit:"mV", weight:0.001, min:700000, max:1100000, step:6250 }}, '
+done < /sys/class/devfreq/exynos5-busfreq-int/volt_table
+`
+	{ SSpacer:{
+		height:1
+	}},
+
+	{ SPane:{ title:"Memory I/O voltage control",
+		description:"MEMIO voltage is the voltage supplied to the memory chip's IO interface. Also known as VDDQ. Voltage is tied to the memory controller's speed." }},
+`
+while read FREQ VOLT; do
+	echo '{ SSeekBar:{'
+		echo 'title:"'$(expr $FREQ / 1000)' MHz", default:'$VOLT', '
+		echo 'action:"memiovolt '${FREQ}'", unit:"mV", weight:0.001, min:900000, max:1250000, step:6250 }}, '
+done < /sys/class/devfreq/exynos5-busfreq-mif/memio_volt_table
+`
+
+MEMIO

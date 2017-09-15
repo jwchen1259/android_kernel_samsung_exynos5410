@@ -1,0 +1,41 @@
+#!/system/xbin/busybox sh
+
+cat << CTAG
+{
+    name:Calibration,
+    elements:[
+	{ SPane:{
+		title:"Battery Scaling Calibration",
+		description:" If you are having incorrect battery SCALING issues, this will reset your device battery % to scale correctly to the approximate available mV. Give it a few hours after you reset the gauge. It may still show you funny values for that period, then the battery percentage should be fine after a full charge cycle."
+	}}
+	{ SSpacer:{
+		height:1
+	}},
+	{ SDescription:{
+		description:" 1- Push button < Reset Fuel-Gauge Chip Now >"
+	}},
+	{ SDescription:{
+		description:" 2- Reboot device"
+	}},
+	{ SDescription:{
+		description:" 3- Deplete battery to 5-10 % (NOT ZERO)"
+	}},
+	{ SDescription:{
+		description:" 4- Charge UNINTERUPTED until FULL (don't touch)"
+	}},
+	{ SDescription:{
+		description:" 5- Unplug then use normally. Device should re-calibrate itself"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Reset Fuel-Gauge Chip Now",
+		action:"fuel-gauge fuel-gauge"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+    ]
+}
+CTAG

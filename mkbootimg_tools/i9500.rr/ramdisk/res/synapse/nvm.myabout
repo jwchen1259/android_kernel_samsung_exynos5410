@@ -1,0 +1,148 @@
+#!/system/xbin/busybox sh
+BB=/system/xbin/busybox
+cat << CTAG
+{
+    name:"About",
+    elements:[
+  	{ SLiveLabel:{
+		refresh:10000000,
+		style:"bold",
+		action:"echo Welcome to Synapse!"
+	}},
+ 	{ SLiveLabel:{
+		refresh:10000000,
+		style:"bold",
+		action:"echo For NevermoreX Kernel - RR"
+	}},
+    	{ SLiveLabel:{
+		refresh:10000000,
+		action:"echo by jwchen17"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Nevermore Kernel @ XDA-Developers",
+		action:"am start -a android.intent.action.VIEW -d http://forum.xda-developers.com/galaxy-s4/i9500-develop/nevermore-kernel-v1-t3391795 > /dev/null;
+		echo Opening browser...;"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+    	{ SDescription:{
+		description:"Thanks to UpInTheAir, AndreiLux, Jesec, Halaszk, Neobuddy, Dorimanx and VoLTaqe for synapse features"
+	}},
+	{ SSpacer:{
+		height:2
+	}},
+	{ SPane:{
+		title:"Up Time:"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"live LiveUpTime"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Kernel Version"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default version"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Build"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default build"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Android Version"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default android_version"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Build Date"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default date"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Baseband"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default baseband"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Bootloader"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default bootloader"
+	}},
+	{ SPane:{
+		title:"Busybox Version"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default busybox_version"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Superuser Version"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default su_version"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Serial"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default serial"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+				title:"Unused States"
+			}},
+				{ SLiveLabel:{
+					refresh:0,
+					action:"live UnUsed"
+				}},
+			
+    ]
+}
+CTAG

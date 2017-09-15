@@ -1,0 +1,127 @@
+#!/system/xbin/busybox sh
+
+cat << CTAG
+{
+    name:CPU Freq,
+    elements:[
+	{ SLiveLabel:{
+		refresh:500,
+		action:"live cpufreq"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+        { SLiveLabel:{
+		title:"CPU temperature",
+		description:" Temperature sensor data as read from the A15 cores. The A7 cores do not have dedicated sensors.",
+		refresh:500,
+		action:"echo \$(echo \$(cat /sys/devices/platform/exynos5-tmu/curr_temp | tr , \"\\n\") | { read C0 C1 C2 C3; echo \"Core 0: \${C0%?}°C@nCore 1: \${C1%?}°C@nCore 2: \${C2%?}°C@nCore 3: \${C3%?}°C\"; })"
+        }},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SLiveLabel:{
+		title:"CPU frequency",
+		description:" Current frequency and active cluster.",
+		refresh:500,
+		action:"FREQ=\$(cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq); [[ \$FREQ -lt 601000 ]] && FREQ=\$(expr \$FREQ \\\\* 2) && L=\"\${FREQ%???} MHz (A7)\" || L=\"\${FREQ%???} MHz (A15)\"; echo \$L;"
+        }},
+	{ SSpacer:{
+		height:1
+	}},
+        { STitleBar:{
+                title:"CPUFreq scaling"
+        }},
+	{ SDescription:{
+		description:"Set the frequencies the CPU scales up to."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"CPU MAX frequency",
+		description:" Set the maximum frequency the CPU scales up to.\n",
+		default:$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq),
+		action:"cpu /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq",
+		values:{
+`
+			while read FREQ TIME; do
+				if [ $FREQ -lt 601000 ]; then
+					LABEL=$(expr $FREQ \* 2)
+					LABEL=$(expr $LABEL / 1000)
+				else
+					LABEL=$(expr $FREQ / 1000)
+				fi
+				echo "$FREQ:\"${LABEL} MHz\", "
+			done < /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state
+`
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+       		title:"CPU MIN frequency",
+		description:" Set the minimum frequency the CPU scales down to.\n",
+		default:$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq),
+		action:"cpu /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq",
+		values:{
+`
+			while read FREQ TIME; do
+				if [ $FREQ -lt 601000 ]; then
+					LABEL=$(expr $FREQ \* 2)
+					LABEL=$(expr $LABEL / 1000)
+				else
+					LABEL=$(expr $FREQ / 1000)
+				fi
+				echo "$FREQ:\"${LABEL} MHz\", "
+			done < /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state
+`
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Exynos Core Control Interface",
+		description:"Set the maximum number of online CPU Cores when screen is on."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"MAX CPU Cores",
+		description:"Default is 4 (all cores).\n",
+		default:$(cat /sys/power/cpucore_max_num_limit),
+		action:"generic /sys/power/cpucore_max_num_limit",
+		values:{
+			"2":"2 Cores",
+			"3":"3 Cores",
+			"4":"4 Cores"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Multicore power saving",
+		description:" Enable or disable Multicore Power Saving will help to reduce power consumption at the cost of slight performance overhead. By enabling this, the system will try to group tasks into the least core possible."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		description:" Default is Disabled.\n",
+		default:$(cat /sys/devices/system/cpu/sched_mc_power_savings),
+		action:"generic /sys/devices/system/cpu/sched_mc_power_savings",
+		values:{
+			0:"Disabled", 1:"Enabled", 2:"Aggressive"
+		}
+	}},
+	{ SSpacer:{
+ 		height:1
+ 	}},
+
+   ]
+}
+CTAG

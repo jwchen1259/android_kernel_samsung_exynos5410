@@ -1,0 +1,58 @@
+import init.universal5410.usb.rc
+import init.universal5410.wifi.rc
+
+on post-fs-data
+# PMK permission
+    mkdir /efs/mc 0770 radio system
+    chown radio system /efs/mc
+    chmod 0770 /efs/mc
+    chown radio system /efs/mc/mc.dat
+    chmod 0640 /efs/mc/mc.dat
+
+# h2k permission
+    mkdir /efs/cpk 0771 radio system
+    chmod 0644 /efs/redata.bin
+    chmod 0644 /efs/cpk/redata.bin
+    chown radio radio /efs/h2k.dat
+    chown radio radio /efs/cpk/h2k.dat
+    chmod 0644 /efs/h2k.dat
+    chmod 0644 /efs/cpk/h2k.dat
+    chown system system /efs/drm/h2k
+
+    restorecon /dev/icd
+    restorecon /dev/icdr
+
+    # Remove symlinks to avoid issues with migrate after nandroid restores
+    # Will be recreated at end of boot
+    rmdir /data/data/com.android.providers.telephony/databases
+    rmdir /data/data/com.android.providers.telephony/shared_prefs
+    rm /data/data/com.android.providers.telephony/databases
+    rm /data/data/com.android.providers.telephony/shared_prefs
+
+on property:sys.boot_completed=1
+    # Symlink directories to access telephony.db and preferred-apn.xml required by cbd
+    symlink /data/user_de/0/com.android.providers.telephony/databases /data/data/com.android.providers.telephony/databases
+    symlink /data/user_de/0/com.android.providers.telephony/shared_prefs /data/data/com.android.providers.telephony/shared_prefs
+
+on boot
+   chown media sdcard_rw /sys/class/power_supply/battery/store_mode
+
+# Parse hardware revision (needs to happen before cbd starts)
+service modemloader /system/bin/modemloader
+    class core
+    oneshot
+
+service cpboot-daemon /system/bin/cbd -d -txmm626x -bh -mh -p 13
+    class main
+    user root
+    group radio cache inet misc audio sdcard_rw log sdcard_r shell
+
+on property:persist.sys.cpboot=disable
+    stop ril-daemon
+    stop cpboot-daemon
+
+# GPS
+service gpsd /system/bin/gpsd -c /system/etc/gps.xml
+    class main
+    user gps
+    group system inet net_raw wakelock

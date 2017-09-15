@@ -1,0 +1,64 @@
+#!/system/xbin/busybox sh
+
+cat << CTAG
+{
+    name:Wipe,
+    elements:[
+	{ SPane:{
+		title:"Wipe Options",
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Wipe Cache Reboot",
+		action:"devtools wipe_cache_reboot"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Wipe Dalvik-Cache Reboot",
+		action:"devtools wipe_dalvik_reboot"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Wipe Cache & Dalvik-Cache Reboot",
+		action:"devtools wipe_cache-dalvik_reboot"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Wipe Junk Folders",
+		description:" * clipboard-cache\n * tombstones\n * anr logs\n * dropbox logs\n * lost+found"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Clean up Junk",
+		action:"devtools clean_up"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"Wipe init.d scripts",
+		description:"Remove useless scripts that interfere with kernel settings."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Clean init.d",
+		action:"devtools clean_initd"
+	}},
+	{ SSpacer:{
+		height:2
+	}},
+    ]
+}
+CTAG

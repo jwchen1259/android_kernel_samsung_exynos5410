@@ -1,0 +1,61 @@
+#!/system/xbin/busybox sh
+
+cat << CTAG
+{
+    name:CPU Hotplug,
+    elements:[
+	{ SOptionList:{
+                title:"Hotplug CPU UP Load",
+		description:" Default is Normal.",
+		default:$(cat /sys/devices/system/cpu/cpu0/cpufreq/hotplug_cpu_up_load),
+		action:"generic /sys/devices/system/cpu/cpu0/cpufreq/hotplug_cpu_up_load",
+		values:{
+			0:"Normal", 
+			1:"Balanced", 
+			2:"Economy"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+        { SSeekBar:{
+                title:"Exynos Dynamic CPU Hotplug FREQ",
+		description:" Sets Hotplug frequency limit for when the kernel switches (OFF or ON) CPU1, CPU2, or CPU3. Default is 500 MHz.\n",
+                default:$(cat /sys/devices/system/cpu/cpu0/cpufreq/normalmin_freq),
+                action:"generic /sys/devices/system/cpu/cpu0/cpufreq/normalmin_freq",
+                values:{
+650000:"1300MHz", 600000:"1200MHz", 550000:"1100MHz", 500000:"1000MHz", 450000:"900MHz", 400000:"800MHz", 350000:"700MHz", 300000:"600MHz", 250000:"500MHz", 200000:"400MHz", 150000:"300MHz", 100000:"200MHz"      }
+        }},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+                title:"Hotplug CPU UP Boost",
+		description:" This controls the CPU up & down threshold. Set to 30-90% for battery savings. Default is 0 (force all cores online).\n",
+		min:0,
+		max:100,
+		unit:" %",
+		step:5,
+                default:$(cat /sys/devices/system/cpu/cpu0/cpufreq/hotplug_cpu_up_boost),
+                action:"generic /sys/devices/system/cpu/cpu0/cpufreq/hotplug_cpu_up_boost",
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+                title:"Hotplug CPU DOWN Hysteresis",
+		description:" Default is 20.\n",
+		min:0,
+		max:100,
+		unit:" %",
+		step:5,
+                default:$(cat /sys/devices/system/cpu/cpu0/cpufreq/hotplug_cpu_down_hysteresis),
+                action:"generic /sys/devices/system/cpu/cpu0/cpufreq/hotplug_cpu_down_hysteresis",
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+
+    ]
+}
+CTAG

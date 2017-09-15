@@ -1,0 +1,113 @@
+#!/system/bin/sh
+
+cat << CTAG
+{
+    name:Backup/Restore,
+    elements:[
+	{ SPane:{
+		title:"Profile"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SGeneric:{
+		title:"Profile Name",
+		description:"",
+		default:"None",
+		action:"backup /res/synapse/nvm/bck_prof",
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SDescription:{
+		description:"First set a name above and [APPLY] your choice in Synapse before pressing the [Backup Current Profile] button below."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Backup Current Profile",
+		action:"sqlite ExportConfigSynapse",
+		notify:[
+			{
+				on:APPLY,
+				do:[ REFRESH, APPLY ],
+				to:"backup /res/synapse/nvm/bck_prof"
+			}
+		]
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"Selected Profile",
+		description:"Choose the settings you want and [APPLY] your choice in Synapse before using the action buttons below. Battery profile only shown click Restart Synapse button after flash one time.\n",
+		action:"restorebackup pickconfig",
+		default:"None",
+		values:[ "None",
+			`for BAK in \`/res/synapse/actions/restorebackup listconfig\`; do
+				echo "\"$BAK\","
+			done`
+		],
+		notify:[
+			{
+				on:APPLY,
+				do:[ REFRESH, APPLY ],
+				to:"backup /res/synapse/nvm/bck_prof"
+			}
+		]
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SDescription:{
+		description:"NOTE: After you restore a profile and press the [Restart Synapse] button, you MUST also press the [X] (Cancel) button on top to load the new settings!"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Restore Selected Profile",
+		action:"sqlite ImportConfigSynapse",
+		notify:[
+			{
+				on:APPLY,
+				do:[ REFRESH, APPLY ],
+				to:"restorebackup pickconfig"
+			}
+		]
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Delete Selected Profile",
+		action:"restorebackup delconfig",
+		notify:[
+			{
+				on:APPLY,
+				do:[ REFRESH, APPLY ],
+				to:"restorebackup pickconfig"
+			}
+		]
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
+		title:"General Actions",
+		description:"To update/refresh lists, press the [Restart Synapse] button below."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Restart Synapse",
+		action:"restorebackup restart"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+    ]
+}
+CTAG

@@ -1,0 +1,113 @@
+#!/system/bin/sh
+
+# Busybox 
+if [ -e /su/xbin/busybox ]; then
+	BB=/su/xbin/busybox;
+else if [ -e /sbin/busybox ]; then
+	BB=/sbin/busybox;
+else
+	BB=/system/xbin/busybox;
+fi;
+fi;
+
+cat << CTAG
+{
+    name:Wakelocks,
+    elements:[
+	{ SDescription:{
+		description:"WARNING: Disabling of wakelocks may have unintended impact on various ROM features, apps or hardware. Leave them default if unsure."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"SensorHub",
+		description:" The SensorHub Wakelock is one of the biggest wake sources. Disable for better deep sleep and less awake time. Enable for stock behavior.\n",
+		default:$(cat /sys/module/wakeup/parameters/enable_sensorhub_wl),
+		action:"generic /sys/module/wakeup/parameters/enable_sensorhub_wl",
+		values:{ Y:"Enabled", N:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"SSP",
+		description:" The SSP Wakelock is one of the biggest wake sources after Sensorhub. Disable for better deep sleep and less awake time. Enable for stock behavior.\n",
+		default:$(cat /sys/module/wakeup/parameters/enable_ssp_wl),
+		action:"generic /sys/module/wakeup/parameters/enable_ssp_wl",
+		values:{ Y:"Enabled", N:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"l2_hsic",
+		description:" The l2_hsic (modem) is one of the biggest wake source. Disable for better deep sleep and less awake time. Enable for stock behavior.\n",
+		default:$(cat /sys/module/wakeup/parameters/enable_l2_hsic_wl),
+		action:"generic /sys/module/wakeup/parameters/enable_l2_hsic_wl",
+		values:{ Y:"Enabled", N:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"rpm_hsic",
+		description:" The rpm_hsic (modem) is one of the biggest wake source. Disable for better deep sleep and less awake time. Enable for stock behavior.\n",
+		default:$(cat /sys/module/wakeup/parameters/enable_rpm_hsic_wl),
+		action:"generic /sys/module/wakeup/parameters/enable_rpm_hsic_wl",
+		values:{ Y:"Enabled", N:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"wlan_wake",
+		description:" The wlan_wake (wifi) is one of the biggest wake source. Disable for better deep sleep and less awake time. Enable for stock behavior.\n",
+		default:$(cat /sys/module/wakeup/parameters/enable_wlan_wake_wl),
+		action:"generic /sys/module/wakeup/parameters/enable_wlan_wake_wl",
+		values:{ Y:"Enabled", N:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"wlan_ctrl_wake",
+		description:" The wlan_ctrl_wake (wifi) is one of the biggest wake source. Disable for better deep sleep and less awake time. Enable for stock behavior.\n",
+		default:$(cat /sys/module/wakeup/parameters/enable_wlan_ctrl_wake_wl),
+		action:"generic /sys/module/wakeup/parameters/enable_wlan_ctrl_wake_wl",
+		values:{ Y:"Enabled", N:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"wlan_rx_wake",
+		description:" The wlan_rx_wake (wifi) is one of the biggest wake source. Disable for better deep sleep and less awake time. Enable for stock behavior.\n",
+		default:$(cat /sys/module/wakeup/parameters/enable_wlan_rx_wake_wl),
+		action:"generic /sys/module/wakeup/parameters/enable_wlan_rx_wake_wl",
+		values:{ Y:"Enabled", N:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"wlan_wd_wake",
+		description:" The wlan_wd_wake (wifi) is one of the biggest wake source. Disable for better deep sleep and less awake time. Enable for stock behavior.\n",
+		default:$(cat /sys/module/wakeup/parameters/enable_wlan_wd_wake_wl),
+		action:"generic /sys/module/wakeup/parameters/enable_wlan_wd_wake_wl",
+		values:{ Y:"Enabled", N:"Disabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+    ]
+}
+CTAG

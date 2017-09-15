@@ -1,0 +1,41 @@
+        #!/sbin/busybox sh
+
+cat << CTAG
+
+{
+    sections: [
+                `. /res/synapse/nvm.myabout`,
+                `. /res/synapse/nvm.cpufreq`,
+                `. /res/synapse/nvm.cpuvolt`,
+                `. /res/synapse/nvm.hotplug`,
+		`. /res/synapse/nvm.cpugovernor`,
+		`. /res/synapse/nvm.gpu`,
+		`. /res/synapse/nvm.qos`,
+		`. /res/synapse/nvm.intmif`,
+		`. /res/synapse/nvm.io`,
+                `. /res/synapse/nvm.entropy`,
+		`. /res/synapse/nvm.lmk`,
+                `. /res/synapse/nvm.memory`,
+                `. /res/synapse/nvm.sysctl_fs`,
+	        `. /res/synapse/nvm.sysctl_kernel`,
+                `. /res/synapse/nvm.sysctl_vm`,
+                `. /res/synapse/nvm.sysctl_net`,
+		`. /res/synapse/nvm.audio`,
+		`. /res/synapse/nvm.screenmodes`,
+		`. /res/synapse/nvm.screen`,
+		`. /res/synapse/nvm.battery`,
+		`. /res/synapse/nvm.batcal`,
+		`. /res/synapse/nvm.led`,
+		`. /res/synapse/nvm.network`,
+                `. /res/synapse/nvm.powersuspend`,
+		`. /res/synapse/nvm.cortex`,
+		`. /res/synapse/nvm.crontab`,
+		`. /res/synapse/nvm.logs`,
+		`. /res/synapse/nvm.tools`,
+		`. /res/synapse/nvm.backup-restore`,
+		`. /res/synapse/nvm.misc`,
+		`. /res/synapse/nvm.wipe`,
+    ]
+}
+CTAG
+

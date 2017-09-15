@@ -1,0 +1,65 @@
+#!/system/xbin/busybox sh
+
+readColour() {
+	P=/sys/class/misc/mdnie/hook_control/
+	echo $(printf "#%02X%02X%02X\n" $(cat $P/$1_red) $(cat $P/$1_green) $(cat $P/$1_blue))
+}
+
+cat << CTAG
+{
+    name:Screen Modes,
+    elements:[
+	{ SPane:{
+		title:"Screen Resolution - EXPERIMENTAL"
+	}},
+		{ SDescription:{
+			description:"IF YOU ARE USING CUSTOM DPI THEN DONT PLAY AROUND WITH THIS TOOL SINCE IT MIGHT BE DIFFICULT TO RETURN TO YOUR DESIRED DPI AFTERWARD!! IN ADDITION, LOWER THAN FULLHD MIGHT CAUSES APPS TO NOT DISPLAY PROPERLY, ESPECIALLY IN TOUCHWIZ SO I DON'T RECOMMEND USING LOWER THAN FULLHD ON TOUCHWIZ"
+		}},
+		{ SDescription:{
+			description:"Use these buttons to switch between different screen resolutions. Device will automatically reboot and this Setting is permanent, so if you want to restore Stock Full HD resolution you'll need to press Full HD Button. HD is the best compromise between graphics quality, performance and battery life - Recommended -. Use this feature if you need to play some heavy games that lag on Full HD resolution or if you want to save battery on normal usage. Quad HD option has been added just if you want maximum screen quality, but remember that performance and battery life will be lower. qHD gives you maximum performance, worst - but not so bad - graphics quality and maximum battery life."
+		}},
+		{ SButton:{
+			label:"qHD 960x540",
+			action:"devtools qhdres"
+		}},
+		{ SButton:{
+			label:"HD 1280x720 - 280",
+			action:"devtools hdres1"
+		}},
+		{ SButton:{
+			label:"HD 1280x720 - 320",
+			action:"devtools hdres2"
+		}},
+		{ SButton:{
+			label:"Full HD 1920x1080 - 420",
+			action:"devtools fullhdres1"
+		}},
+		{ SButton:{
+			label:"Full HD 1920x1080 - 480",
+			action:"devtools fullhdres2"
+		}},
+		{ SButton:{
+			label:"Quad HD 2560x1440",
+			action:"devtools quadhdres"
+		}},
+	{ SPane:{
+		title:"mDNIe global controls",
+		description:"mobile Digital Natural Image engine control. Samsungs hardware image post-processor controls virtually any image manipulation. All control master switches, if left as delta controls, will negate the sequence setting if checked. Master sequence has SCR and CS enabled by default."
+        }},
+	{ SSeekBar:{
+		title:"Mode",
+		description:"0 = Dynamic, 1 = Standard, 2 = Natural, 3 = Movie, 4 = Auto",
+		max:4,
+		default:0,
+		action:"generic /sys/class/mdnie/mdnie/mode"
+	}},
+	{ SSeekBar:{
+		title:"Scenario",
+		description:"0 = UI, 1 = Video, 2 = Video Warm, 3 = Video Cold, 4 = Camera, 5 = Navigation, 6 = Gallery, 7 = VT, 8 = Browser, 9 = E-book, 10 = E-Mail",
+		max:10,
+		default:0,
+		action:"generic /sys/class/mdnie/mdnie/scenario"
+	}},
+    ]
+}
+CTAG
