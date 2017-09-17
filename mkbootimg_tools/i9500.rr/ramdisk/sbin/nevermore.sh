@@ -109,7 +109,7 @@ echo "130" > /proc/sys/vm/swappiness;
 echo "10" > /proc/sys/vm/vfs_cache_pressure;
 echo "10" > /proc/sys/vm/dirty_ratio;
 echo "5" > /proc/sys/vm/dirty_background_ratio;
-echo "800" > /proc/sys/vm/dirty_expire_centisecs;
+echo "500" > /proc/sys/vm/dirty_expire_centisecs;
 echo "800" > /proc/sys/vm/dirty_writeback_centisecs;
 echo "3" > /proc/sys/vm/drop_caches;
 chmod 444 /dev/erandom;

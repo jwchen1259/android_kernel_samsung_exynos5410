@@ -5,6 +5,21 @@ cat << CTAG
     name:Tweaks,
     elements:[
  	{ SPane:{
+ 		title:"Wakelock control",
+ 	}},
+ 	{ SOptionList:{
+ 		title:"l2_hsic_ws Wakelock",
+ 		description:" Enable or disable modem wakelock for battery saving. Default is Disabled.\n",
+                 default:N,
+ 		action:"generic /sys/module/wakeup/parameters/enable_l2_hsic_ws",
+ 		values:{
+ 			N:"Disabled", Y:"Enabled"
+ 		}
+ 	}},
+ 	{ SSpacer:{
+ 		height:1
+ 	}},
+ 	{ SPane:{
 		title:"SPI CRC Settings",
 		description:" Enabling software CRCs on the data blocks can be a significant (30%) performance cost, and for other reasons may not always be desired. CRC is a mechanism aiming to prevent data corruption when enabled (reduce the performance around 30%). So if you disable it (improve the performance), there may be a chance you run into problems. Use it at your risk. Default is Disabled.",
 	}},
