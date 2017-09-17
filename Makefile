@@ -192,7 +192,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
 ARCH		?=arm
-CROSS_COMPILE	?=ccache ../Toolchains/arm-eabi-6.x/bin/arm-eabi-
+CROSS_COMPILE	?=ccache /home/jwchen/Toolchains/arm-eabi-6.x/bin/arm-eabi-
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -353,8 +353,8 @@ CFLAGS_KERNEL	= -munaligned-access -mfpu=neon-vfpv4 \
 		  -fgcse-after-reload -fgcse-sm \
 		  -fgcse-las -ftree-loop-im -ftree-loop-ivcanon -fweb \
 		  -frename-registers -ftree-vectorize \
-		  -ffast-math -mvectorize-with-neon-quad -fmodulo-sched \		
-		  -funsafe-math-optimizations \		
+		  -ffast-math -mvectorize-with-neon-quad -fmodulo-sched \
+		  -funsafe-math-optimizations \
 		  -std=gnu89 
 AFLAGS_KERNEL	= 
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage

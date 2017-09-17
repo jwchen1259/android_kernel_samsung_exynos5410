@@ -16,8 +16,8 @@
 
 enum zen_data_dir { ASYNC, SYNC };
 
-static const int sync_expire  = HZ / 2;    /* max time before a sync is submitted. */
-static const int async_expire = 5 * HZ;    /* ditto for async, these limits are SOFT! */
+static const int sync_expire  = HZ / 4;    /* max time before a sync is submitted. */
+static const int async_expire = 2 * HZ;    /* ditto for async, these limits are SOFT! */
 static const int fifo_batch = 1;
 
 struct zen_data {
@@ -25,7 +25,7 @@ struct zen_data {
 	/* Requests are only present on fifo_list */
 	struct list_head fifo_list[2];
 
-	unsigned int batching;		/* number of sequential requests made */
+        unsigned int batching;          /* number of sequential requests made */
 
 	/* tunables */
 	int fifo_expire[2];
@@ -40,17 +40,17 @@ zen_get_data(struct request_queue *q) {
 static void zen_dispatch(struct zen_data *, struct request *);
 
 static void
-zen_merged_requests(struct request_queue *q, struct request *req,
+zen_merged_requests(struct request_queue *q, struct request *rq,
                     struct request *next)
 {
 	/*
 	 * if next expires before rq, assign its expire time to arq
 	 * and move into next position (next will be deleted) in fifo
 	 */
-	if (!list_empty(&req->queuelist) && !list_empty(&next->queuelist)) {
-		if (time_before(rq_fifo_time(next), rq_fifo_time(req))) {
-			list_move(&req->queuelist, &next->queuelist);
-			rq_set_fifo_time(req, rq_fifo_time(next));
+	if (!list_empty(&rq->queuelist) && !list_empty(&next->queuelist)) {
+		if (time_before(rq_fifo_time(next), rq_fifo_time(rq))) {
+			list_move(&rq->queuelist, &next->queuelist);
+			rq_set_fifo_time(rq, rq_fifo_time(next));
 		}
 	}
 
@@ -61,11 +61,11 @@ zen_merged_requests(struct request_queue *q, struct request *req,
 static void zen_add_request(struct request_queue *q, struct request *rq)
 {
 	struct zen_data *zdata = zen_get_data(q);
-	const int sync = rq_is_sync(rq);
+	const int dir = rq_data_dir(rq);
 
-	if (zdata->fifo_expire[sync]) {
-		rq_set_fifo_time(rq, jiffies + zdata->fifo_expire[sync]);
-		list_add_tail(&rq->queuelist, &zdata->fifo_list[sync]);
+	if (zdata->fifo_expire[dir]) {
+		rq_set_fifo_time(rq, jiffies + zdata->fifo_expire[dir]);
+		list_add_tail(&rq->queuelist, &zdata->fifo_list[dir]);
 	}
 }
 
@@ -91,7 +91,7 @@ zen_expired_request(struct zen_data *zdata, int ddir)
                 return NULL;
 
         rq = rq_entry_fifo(zdata->fifo_list[ddir].next);
-        if (time_after_eq(jiffies, rq_fifo_time(rq)))
+        if (time_after(jiffies, rq_fifo_time(rq)))
                 return rq;
 
         return NULL;
@@ -165,9 +165,11 @@ static void *zen_init_queue(struct request_queue *q)
 		return NULL;
 	INIT_LIST_HEAD(&zdata->fifo_list[SYNC]);
 	INIT_LIST_HEAD(&zdata->fifo_list[ASYNC]);
+
 	zdata->fifo_expire[SYNC] = sync_expire;
 	zdata->fifo_expire[ASYNC] = async_expire;
 	zdata->fifo_batch = fifo_batch;
+
 	return zdata;
 }
 
@@ -208,7 +210,7 @@ SHOW_FUNCTION(zen_async_expire_show, zdata->fifo_expire[ASYNC], 1);
 SHOW_FUNCTION(zen_fifo_batch_show, zdata->fifo_batch, 0);
 #undef SHOW_FUNCTION
 
-#define STORE_FUNCTION(__FUNC, __PTR, MIN, MAX, __CONV) \
+#define STORE_FUNCTION(__FUNC, __PTR, MIN, MAX, __CONV, NDX)		\
 static ssize_t __FUNC(struct elevator_queue *e, const char *page, size_t count) \
 { \
 	struct zen_data *zdata = e->elevator_data; \
@@ -224,9 +226,9 @@ static ssize_t __FUNC(struct elevator_queue *e, const char *page, size_t count) 
 		*(__PTR) = __data; \
 	return ret; \
 }
-STORE_FUNCTION(zen_sync_expire_store, &zdata->fifo_expire[SYNC], 0, INT_MAX, 1);
-STORE_FUNCTION(zen_async_expire_store, &zdata->fifo_expire[ASYNC], 0, INT_MAX, 1);
-STORE_FUNCTION(zen_fifo_batch_store, &zdata->fifo_batch, 0, INT_MAX, 0);
+STORE_FUNCTION(zen_sync_expire_store, &zdata->fifo_expire[SYNC], 0, INT_MAX, 1, 0);
+STORE_FUNCTION(zen_async_expire_store, &zdata->fifo_expire[ASYNC], 0, INT_MAX, 1, 1);
+STORE_FUNCTION(zen_fifo_batch_store, &zdata->fifo_batch, 0, INT_MAX, 0, 2);
 #undef STORE_FUNCTION
 
 #define DD_ATTR(name) \
@@ -257,7 +259,9 @@ static struct elevator_type iosched_zen = {
 
 static int __init zen_init(void)
 {
-	return elv_register(&iosched_zen);
+	elv_register(&iosched_zen);
+
+	return 0;
 }
 
 static void __exit zen_exit(void)
@@ -273,3 +277,4 @@ MODULE_AUTHOR("Brandon Berhent");
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Zen IO scheduler");
 MODULE_VERSION("1.0");
+
