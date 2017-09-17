@@ -208,14 +208,14 @@ EXPORT_SYMBOL(local_bh_enable_ip);
  * should not be able to lock up the box.
  */
 #define MAX_SOFTIRQ_TIME  msecs_to_jiffies(2)
-#define MAX_SOFTIRQ_RESTART 10
+#define MAX_SOFTIRQ_RESTART MAX_SOFTIRQ_TIME  max(1, (2*HZ/1000))
 
 asmlinkage void __do_softirq(void)
 {
 	struct softirq_action *h;
 	__u32 pending;
 	int cpu;
-	int max_restart = MAX_SOFTIRQ_RESTART;
+	unsigned long end = jiffies + MAX_SOFTIRQ_TIME;
 
 	pending = local_softirq_pending();
 	account_system_vtime(current);
@@ -263,11 +263,12 @@ restart:
 	local_irq_disable();
 
 	pending = local_softirq_pending();
-	if (pending && --max_restart)
-		goto restart;
-	if (pending)
-		wakeup_softirqd();
+if (pending) {
+		if (time_before(jiffies, end) && !need_resched())
+			goto restart;
 
+		wakeup_softirqd();
+	}
 
 	lockdep_softirq_exit();
 
