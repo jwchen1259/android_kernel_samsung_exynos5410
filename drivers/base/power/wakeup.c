@@ -19,7 +19,7 @@
 
 #include "power.h"
 
-static bool enable_l2_hsic_ws = true;
+static bool enable_l2_hsic_ws = false;
 module_param(enable_l2_hsic_ws, bool, 0644);
 
 /*

@@ -58,18 +58,18 @@ unsigned int lpcharge;
 EXPORT_SYMBOL(lpcharge);
 
 static sec_charging_current_t charging_current_table[] = {
-	{1800,	1800,	200,	40 * 60},
+	{1900,	1700,	200,	40 * 60},
 	{0,	0,	0,	0},
 	{0,	0,	0,	0},
-	{1800,	1800,	200,	40*60},
+	{1900,	1700,	200,	40*60},
 	{500,	500,	200,	40*60},
 	{1200,	1200,	200,	40*60},
 	{1200,	1200,	200,	40*60},
 	{500,	500,	200,	40*60},
-	{1600,	1600,	200,	40*60},
+	{1800,	1700,	200,	40*60},
 	{0,	0,	0,	0},
 	{700,	800,	200,	40*60},
-	{1800,	1800,	200,	40*60},
+	{1900,	1700,	200,	40*60},
 	{0,	0,	0,	0},
 	{0,	0,	0,	0},
 	{0, 0,	0,	0},/*lan hub*/
@@ -268,23 +268,23 @@ static int sec_bat_get_cable_from_extended_cable_type(
 				break;
 			case ONLINE_POWER_TYPE_MHL_500:
 				cable_type = POWER_SUPPLY_TYPE_MISC;
-				charge_current_max = mhl_class_500;
-				charge_current = mhl_class_500;
+				charge_current_max = 500;
+				charge_current = 500;
 				break;
 			case ONLINE_POWER_TYPE_MHL_900:
 				cable_type = POWER_SUPPLY_TYPE_MISC;
-				charge_current_max = mhl_class_900;
-				charge_current = mhl_class_900;
+				charge_current_max = 900;
+				charge_current = 900;
 				break;
 			case ONLINE_POWER_TYPE_MHL_1500:
 				cable_type = POWER_SUPPLY_TYPE_MISC;
-				charge_current_max = mhl_class_1500;
-				charge_current = mhl_class_1500;
+				charge_current_max = 1500;
+				charge_current = 1500;
 				break;
 			case ONLINE_POWER_TYPE_USB:
 				cable_type = POWER_SUPPLY_TYPE_USB;
-				charge_current_max = mhl_class_usb;
-				charge_current = mhl_class_usb;
+				charge_current_max = 500;
+				charge_current = 500;
 				break;
 			default:
 				cable_type = cable_main;
@@ -298,7 +298,7 @@ static int sec_bat_get_cable_from_extended_cable_type(
 		case ONLINE_SUB_TYPE_SMART_NOTG:
 			cable_type = POWER_SUPPLY_TYPE_MAINS;
 			charge_current_max = 1900;
-			charge_current = 1600;
+			charge_current = 1700;
 			break;
 		default:
 			cable_type = cable_main;

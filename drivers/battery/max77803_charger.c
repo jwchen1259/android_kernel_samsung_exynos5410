@@ -17,19 +17,16 @@
 #include <mach/usb3-drd.h>
 #endif
 
-
-
-
 #define ENABLE 1
 #define DISABLE 0
 
 #define RECOVERY_DELAY		3000
 #define RECOVERY_CNT		5
-#define REDUCE_CURRENT_STEP	100
-#define MINIMUM_INPUT_CURRENT	300
+#define REDUCE_CURRENT_STEP	0
+#define MINIMUM_INPUT_CURRENT	1700
 
-int SIOP_INPUT_LIMIT_CURRENT = 1200;
-int SIOP_CHARGING_LIMIT_CURRENT = 1000; 
+int SIOP_INPUT_LIMIT_CURRENT = 1300;
+int SIOP_CHARGING_LIMIT_CURRENT = 1300; 
 
 struct max77803_charger_data {
 	struct max77803_dev	*max77803;
