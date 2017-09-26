@@ -12,7 +12,7 @@ cat << CTAG
  	{ SLiveLabel:{
 		refresh:10000000,
 		style:"bold",
-		action:"echo NevermoreX Kernel - RR Nougat"
+		action:"echo NevermoreX Kernel - Lineage Nougat"
 	}},
     	{ SLiveLabel:{
 		refresh:10000000,
