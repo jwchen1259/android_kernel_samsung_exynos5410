@@ -5,20 +5,20 @@ cat << CTAG
     name:Tweaks,
     elements:[
     { SPane:{
-  		title:"Wakelock control",
-  	}},
-  	{ SOptionList:{
-  		title:"l2_hsic_ws Wakelock",
-  		description:" Enable or disable modem wakelock for battery saving. Default is Disabled.\n",
-                  default:N,
-  		action:"generic /sys/module/wakeup/parameters/enable_l2_hsic_ws",
-  		values:{
-  			N:"Disabled", Y:"Enabled"
-  		}
-  	}},
-  	{ SSpacer:{
-  		height:1
-  	}},
+ 		title:"Wakelock control",
+ 	}},
+ 	{ SOptionList:{
+ 		title:"l2_hsic_ws Wakelock",
+ 		description:" Enable or disable modem wakelock for battery saving. Default is Disabled.\n",
+                 default:N,
+ 		action:"generic /sys/module/wakeup/parameters/enable_l2_hsic_ws",
+ 		values:{
+ 			N:"Disabled", Y:"Enabled"
+ 	}
+ 	}},
+ 	{ SSpacer:{
+ 		height:1
+ 	}},
     { SPane:{
 		title:"Gentle Fair Sleepers",
 		description:" Sleeper Fairness is a concept used by CFS which treat sleeping/waiting tasks as if they were in a run queue. This implies tasks which spend most of the time waiting for an user input and such will get a fair share of CPU when they need it. Disabling Gentle Fair Sleepers could improve UI responsiveness."

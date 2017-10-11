@@ -104,24 +104,6 @@ cat << CTAG
 		height:1
 	}},
 	{ SPane:{
-		title:"PEWQ (Power-efficient Workqueues)",
-		description:" Enable or disable PEWQ will help to reduce power consumption at the cost of slight performance overhead. By enabling this, PEWQ are used for unbound scheduled work to save load on sibling CPU cores and queuing work on CPU 0."
-	}},
-	{ SSpacer:{
-		height:1
-	}},
-	{ SOptionList:{
-		description:" Default is Disabled.\n",
-		default:$(cat /sys/module/workqueue/parameters/power_efficient),
-		action:"generic /sys/module/workqueue/parameters/power_efficient",
-		values:{
-			N:"Disabled", Y:"Enabled"
-		}
-	}},
-	{ SSpacer:{
- 		height:1
- 	}},
-	{ SPane:{
 		title:"Multicore power saving",
 		description:" Enable or disable Multicore Power Saving will help to reduce power consumption at the cost of slight performance overhead. By enabling this, the system will try to group tasks into the least core possible."
 	}},

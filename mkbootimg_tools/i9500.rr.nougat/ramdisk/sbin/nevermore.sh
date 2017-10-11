@@ -100,6 +100,8 @@ echo 0 > /sys/devices/virtual/sensors/proximity_sensor/prox_cal;
 echo 1 > /sys/devices/virtual/sensors/proximity_sensor/prox_cal;
 echo 0 > /sys/module/pvrsrvkm/parameters/gPVRDebugLevel;
 echo 0 > /sys/module/pvrsrvkm/parameters/gPVREnableVSync;
+echo 0 > /proc/sys/kernel/randomize_va_space;
+echo "3" > /proc/sys/vm/drop_caches;
 chmod 444 /dev/erandom;
 chmod 444 /dev/frandom;
 
